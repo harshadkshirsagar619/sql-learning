@@ -1,145 +1,97 @@
-use Day01;
+use New;
 
-create table customer(
-	id int,
-    name varchar(50),
-    phone varchar(15)
+CREATE TABLE Students (
+    student_id INT PRIMARY KEY,
+    student_name VARCHAR(50),
+    course_id INT
 );
 
-create table orders(
-	id int,
-    iteam_name varchar(26),
-    cust_id int
+INSERT INTO Students (student_id, student_name, course_id)
+VALUES
+(1, 'Harsh', 101),
+(2, 'Ram', 102),
+(3, 'Karan', 103),
+(4, 'Amit', 104),
+(5, 'Vignesh', NULL);
+
+INSERT INTO Students (student_id, student_name, course_id)
+VALUES
+(6, 'Rahul', 106),
+(7, 'Sneha', 107),
+(8, 'Priya', NULL),
+(9, 'Rohan', 109),
+(10, 'Neha', 110);
+
+CREATE TABLE Courses (
+    course_id INT PRIMARY KEY,
+    course_name VARCHAR(50)
 );
 
--- Customer data
-INSERT INTO customer (id, name, phone) VALUES
-(101, 'Harsh', '9876543210'),
-(102, 'Ram', '9876543211'),
-(103, 'Sham', '9876543212'),
-(104, 'Kumar', '9876543213'),
-(105, 'Amit', '9876543214'),
-(106, 'Rahul', '9876543215'),
-(107, 'Rohit', '9876543216');
+INSERT INTO Courses (course_id, course_name)
+VALUES
+(106, 'JavaScript'),
+(107, 'Java'),
+(108, 'Angular'),
+(109, 'SQL'),
+(111, 'AWS');
+
+INSERT INTO Courses (course_id, course_name)
+VALUES
+(101, 'Java'),
+(102, 'Python'),
+(103, 'SQL'),
+(105, 'Spring Boot');
 
 
--- Orders data
-INSERT INTO orders (id, iteam_name, cust_id) VALUES
-(1, 'Laptop', 101),
-(2, 'Mobile', 102),
-(3, 'Keyboard', 103),
-(4, 'Mouse', 101),
-(5, 'Monitor', 104),
-(6, 'Headphone', 105),
-(7, 'Tablet', 102);
+-- Inner Join
+
+select * from Students as s
+inner join Courses as c
+on s.course_id = c.course_id;
+
+select student_name, course_name from Students as s
+inner join Courses as c
+on s.course_id = c.course_id;
+
+select student_id,student_name,course_name from Students as s
+inner join Courses as c
+on s.course_id = c.course_id
+where c.course_name = 'SQL';
 
 
-INSERT INTO orders (id, iteam_name, cust_id) VALUES
-(8, 'Laptop', 117),
-(9, 'Electronics', 110);
--- Inner join
+select student_id,student_name,course_name from Students as s
+inner join Courses as c
+on s.course_id = c.course_id
+where s.student_id > 5;
 
-select * 
-from customer
-inner join orders
-on customer.id = orders.cust_id; 
+-- Left Join
 
+select * from Students as s 
+left join Courses as c
+on s.course_id = c.course_id ;
 
-select 
-	customer.id,
-    customer.name,
-    orders.iteam_name
-from customer
-inner join orders
-on customer.id = orders.cust_id
-where customer.name like '_a%'; 
+select student_name,course_name from Students as s
+left join Courses as c
+on s.course_id = c.course_id
+where c.course_name != 'SQL';
+
+-- right Join
 
 
-select 
-	customer.id,
-    customer.name,
-    orders.iteam_name
-from customer
-inner join orders
-on customer.id = orders.cust_id
-where customer.id < 105; 
-
-select customer.name,
-	orders.iteam_name
-    from customer  -- as c
-    inner join orders  -- as o
-    on customer.id = orders.cust_id
-    where iteam_name in('Laptop','Tablet','Mouse');
+select count(s.student_name) as totalStudent , c.course_name from Students as s 
+right join Courses as c
+on s.course_id = c.course_id
+group by c.course_name
+having totalStudent > 0;
 
 
--- left Join
+-- full join 
 
-select * 
-from customer 
-left join orders 
-on customer.id = orders.cust_id;
-
-select 
-customer.name,
-customer.phone,
-orders.iteam_name
-from customer
-left join orders
-on customer.id = orders.cust_id
-order by orders.iteam_name asc;
-
-
--- right join
-
-select * from customer right join orders on customer.id = orders.cust_id;
-
--- full Join
-
-select customer.name,
-customer.phone,orders.iteam_name
-from customer
-left join orders
-on customer.id = orders.cust_id
-
+select s.student_name,c.course_name from Students as s
+left join Courses as c
+on s.course_id = c.course_id
 union
 
-select customer.name,
-customer.phone,orders.iteam_name
-from customer
-right join orders
-on customer.id = orders.cust_id
-order by name asc;
-
--- Advance Joins
--- Left Aniti Joins
-
-select * from customer
-left join orders
-on customer.id = orders.cust_id
-where orders.cust_id is null; 
-
-
--- right Aniti Joins
-
-select * from customer
-right join orders
-on customer.id = orders.cust_id
-where customer.id is null; 
-
--- full anti join
-
-select * from customer
-left join orders
-on customer.id = orders.cust_id
-where orders.cust_id is null
-union
-select * from customer
-right join orders
-on customer.id = orders.cust_id
-where customer.id is null; 
-
--- cross join
-
-select * 
-from customer
-cross join orders;
+select s.student_name,c.course_name  from Students as s
+right join Courses as c
+on s.course_id = c.course_id;
