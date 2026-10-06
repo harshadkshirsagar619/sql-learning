@@ -40,7 +40,6 @@ select * from bank;
 
 insert into bank(emp_id) values (101),(102);
 
--- updating salary in employee table and in bank
 
 
 
